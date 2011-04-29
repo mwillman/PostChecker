@@ -23,6 +23,9 @@ Place, Suite 330, Boston, MA 02111-1307 USA
 Initial release
 07/2005    MBWillman
 
+Minor edits
+11/2005    MBWillman
+
 FORMATTED FOR 80x25
 
 
@@ -106,7 +109,8 @@ etc.
 Unless you plan on starting the daemon manually, you'll also need to perform
 the following tasks.
 
-# cp queue_counts.initd /etc/init.d
+# cp queue_counts.initd /etc/init.d/queue_counts
+# chmod 755 /etc/init.d/queue_counts
 # chkconfig --add queue_counts
 # service queue_counts start
 # service queue_counts status

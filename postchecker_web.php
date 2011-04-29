@@ -75,7 +75,7 @@ foreach ($stats as $server => $trash)
 			$filename = "$server.$queue.$unique";
 
 			// make the graph for the active queue
-			generate_graph($server, $queue, $number, $stats[$server]['red_queue'][0], "$pc_cache/$filename");
+			generate_graph($queue, $number, $stats[$server]['red_queue'][0], "$pc_cache/$filename");
 
 			// include it in the web page
 			echo "<img src=\"$pc_webroot/$filename.png\"";

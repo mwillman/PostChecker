@@ -23,8 +23,9 @@ Initial release
 
 FORMATTED FOR 80x25
 
+1.3 -	updated for PHP 5
 
 1.2 -	queue_counts.c available for client side
-	some minor documentation && directory structure  changes
+	some minor documentation && directory structure changes
 
 1.0 -	initial release

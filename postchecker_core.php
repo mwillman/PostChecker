@@ -27,6 +27,12 @@
  *
  * Initial release
  * 07/2005	MBWillman
+ *
+ * Updated for PHP 5 - you must use a version of JPgraph that is PHP 5 compliant
+ * 05/2008	MBWillman
+ *
+ * Remove unused variable in generate_graphs()
+ * 07/2008	MBWillman
  */
 
 
@@ -42,6 +48,8 @@ $debug = false;
 // set local error handler
 set_error_handler('error_hand');
 
+// set local time zone
+date_default_timezone_set("America/Los_Angeles");
 
 /*
  * function parse_config()
@@ -179,12 +187,12 @@ function get_current_counts($stats, $servers)
 
 
 /*
- * generate_graph($l_server, $l_queue, $l_number, $l_red_queue, $filename)
+ * generate_graph($l_queue, $l_number, $l_red_queue, $filename)
  *
  * generate the graph from input
  */
 
-function generate_graph($l_server, $l_queue, $l_number, $l_red_queue, $filename)
+function generate_graph($l_queue, $l_number, $l_red_queue, $filename)
 {
 	// graph setup
 	$current_graph = new Graph(200,200);
@@ -248,7 +256,7 @@ function generate_graph($l_server, $l_queue, $l_number, $l_red_queue, $filename)
 	// assumes your default output is png
 	$current_graph->Stroke("$filename.png");
 
-}// generate_graph($l_server, $l_queue, $l_number, $l_red_queue, $filename)
+}// generate_graph($l_queue, $l_number, $l_red_queue, $filename)
 
 
 /*
