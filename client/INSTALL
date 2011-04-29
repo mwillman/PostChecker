@@ -1,0 +1,140 @@
+INSTALL
+
+
+Copyright (c) 2005 Matt Willman
+ALL RIGHTS RESERVED
+
+Contact: willman.matt@threepaw.com
+
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+Place, Suite 330, Boston, MA 02111-1307 USA
+
+Initial release
+07/2005    MBWillman
+
+FORMATTED FOR 80x25
+
+
+These instructions assume Linux.  Should be easily implemented on any of the
+commercial Unices after you edit to suit your local configuration.
+
+
+Client Install
+
+There are two available client side daemons for PostChecker.  Choose only
+one; both provide identical functionality.  Both daemons need to run as 
+root, or a user that can access the Postfix spool queues.
+
+The first is a shell program that leverages xinetd/inetd to run as a daemon.
+If you need better performance (monitoring more than 10 servers, for example),
+or you don't run xinetd/inetd, choose the compiled client.
+
+
+Shell code Install
+
+Copy queue_counts.sh to your favorite local bin directory.  Edit the POSTCONF
+variable to point to your local copy of postconf.
+
+Add the following line to your /etc/services file:
+
+postchecker     7678/tcp                        # PostChecker port
+
+Copy the postchecker.xinetd.sample file into your /etc/xinetd.d directory and
+edit the following lines to taste (after renaming the file to postchecker):
+
+only_from       = 127.0.0.1
+server          = /path/to/queue_counts.sh
+
+Once everything is in place, you should reload xinetd:
+
+# service xinetd reload
+
+That should be it
+
+
+Compiled code Install
+
+The compiled code makes several assumptions.  It assumes that your local
+Postfix spool directory is /var/spool/postfix, and that you're going to 
+monitor the active, deferred, corrupt, and hold queues.  Change at will to
+suit your local environment.
+
+You'll also need to configure a list of IP addresses that are allowed to 
+connect to the daemon.  If you'd like to do without this (not recommended),
+change the RESTRICTED define to 0.
+
+Once your local edits are completed:
+
+# make
+# cp queue_counts /usr/sbin
+# chmod 755 /usr/sbin/queue_counts
+
+Add the following line to your /etc/services file:
+
+postchecker     7678/tcp                        # PostChecker port
+
+Now to setup logging.  The daemon uses the syslog facility to log
+warning and informational messages.  I prefer to split those out, but you
+may have a different logging scheme.  The syslog messages are generated using
+the "LOCAL1" facility.  Since PostChecker is the only thing that logs at
+LOCAL1 (on my system)....
+
+Add the following lines to your /etc/syslog.conf file:
+
+# PostChecker
+local1.*			/var/log/postchecker.log
+
+Note that there are tabs between local1.* and the logfile name.
+
+# touch /var/log/postchecker.log
+# service syslog restart
+
+Some additional configuration will be needed if you want the logs rotated,
+etc. 
+
+Unless you plan on starting the daemon manually, you'll also need to perform
+the following tasks.
+
+# cp queue_counts.initd /etc/init.d
+# chkconfig --add queue_counts
+# service queue_counts start
+# service queue_counts status
+
+Assuming everything is OK, you should see something similar to the following
+after you run the status check:
+
+[root@localhost client]# service queue_counts status
+queue_counts (pid 4419) is running...
+[root@localhost client]#
+
+If not, (and you setup logging already), check your logfile for problems.
+
+Finally, the critical system test.  From an allowed IP address:
+
+# telnet <client name> postchecker
+
+If you see something like this, you're good to go:
+
+[root@localhost main]# telnet <client name> postchecker
+Trying 127.0.0.1...
+Connected to localhost (127.0.0.1).
+Escape character is '^]'.
+active:5
+deferred:5
+corrupt:0
+hold:0
+Connection closed by foreign host.
+[root@localhost main]#
+
+If you don't see something similar to that, check your log files for errors.

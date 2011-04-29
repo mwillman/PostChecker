@@ -48,51 +48,15 @@ Client
 	http://www.postfix.org
 
 
-
 Client Install
 
-Copy queue_counts.sh to your favorite local bin directory.  Edit the POSTCONF
-variable to point to your local copy of postconf.
-
-Add the following line to your /etc/services file:
-
-postchecker     7678/tcp                        # PostChecker port
-
-Copy the postchecker.xinetd.sample file into your /etc/xinetd.d directory and
-edit the following lines to taste (after renaming the file to postchecker):
-
-only_from       = 127.0.0.1
-server          = /path/to/queue_counts.sh
-
-Once everything is in place, you should reload xinetd:
-
-# service xinetd reload
-
-If everything worked OK, run the following command to check your client install.
-
-# telnet localhost postchecker
-
-If you see something like this, you're good to go:
-
-[root@bernard main]# telnet localhost postchecker
-Trying 127.0.0.1...
-Connected to localhost (127.0.0.1).
-Escape character is '^]'.
-active:5
-deferred:5
-corrupt:0
-hold:0
-Connection closed by foreign host.
-[root@bernard main]#
-
-If you don't see something similar to that, check your log files for errors,
-and you're configuration files for typos.
+See the INSTALL document in the $POSTCHECKER_ROOT/client directory
 
 
 Server Install
 
-	These instructions assume you want to use all of the front-ends, and that
-you've installed and tested a webserver, PHP, and jpGraph.
+	These instructions assume you want to use all of the front-ends, and
+that you've installed and tested a webserver, PHP, and jpGraph.
 
 	Create a cache directory under your webroot that the user your
 webserver is running as can write to.  This directory will hold the graphs

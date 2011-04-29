@@ -1,0 +1,79 @@
+#!/bin/sh
+#
+# chkconfig: 345 99 99 
+#
+# description:  Daemon which returns the number of items in the	configured
+#	 postfix queues when a connection is made to the PostChecker port from
+#	 an allowed IP address
+#
+# processname: queue_counts
+# pidfile: /var/run/queue_counts.pid
+#
+#
+# Copyright (c) 2005 Matt Willman
+# ALL RIGHTS RESERVED
+#
+# Contact: willman.matt@threepaw.com
+#
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# Initial release
+# 07/2005	MBWillman
+# 
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+RETVAL=0
+
+start() {
+    echo -n $"Starting queue_counts daemon: "
+    daemon queue_counts
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch /var/lock/subsys/queue_counts
+}
+
+stop() {
+    echo -n $"Stopping queue_counts daemon: "
+    killproc queue_counts
+    RETVAL=$?
+    echo
+    if [ $RETVAL -eq 0 ]; then
+        rm -f /var/lock/subsys/queue_counts
+    fi
+}
+
+# See how we were called.
+case "$1" in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    status)
+        status queue_counts
+	RETVAL=$?
+        ;;
+    restart)
+	stop
+	start
+	;;
+    *)
+	echo $"Usage: $0 {start|stop|status|restart}"
+	;;
+esac
+exit $RETVAL

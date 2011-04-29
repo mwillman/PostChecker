@@ -4,8 +4,8 @@
 /*
  * postchecker_cli.php
  *
- * CLI frontend to PostChecker.  Accepts one command line arg to present it's output
- * in machine parseable format.  Otherwise the output is human readable.
+ * CLI frontend to PostChecker.  Accepts one command line arg to present it's
+ * output in machine parseable format.  Otherwise the output is human readable.
  *
  * ./postchecker_cli.php
  *	-- will generate human readable output
@@ -22,11 +22,13 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later version.
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
@@ -62,7 +64,7 @@ $stats = get_current_counts($stats, $servers);
 // human readable gets a nice title
 if (!$parseable)
 {
-	print "PostChecker 1.0\n";
+	print "PostChecker 1.2\n";
 
 	echo "Queue status as of ->";
 	print strftime('%c');

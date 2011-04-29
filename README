@@ -58,6 +58,7 @@ SubVersion repository, and some other relevant links.
 
 
 Design
+
 	PostChecker is split into two primary pieces.  The "client" side code
 sits on the Postfix servers you want to monitor.  When someone connects to
 the "client" port, the client side code returns the number of active items in
@@ -110,7 +111,6 @@ want to install PHP?), let me know about that as well.  Choice is good.
 
 Future development direction...maybe
 
-- a alternate/replacement daemon for queue_counts.sh that doesn't depend on
-	xinetd/inetd
 - a Windows GUI interface using PHP/GTK
 - install script
+- delete transient graphs, or generate them inline
