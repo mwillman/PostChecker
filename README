@@ -4,6 +4,8 @@ PostChecker is a distributed monitoring tool for Postfix servers.  The main purp
 
 PostChecker is designed to be a interactive monitoring tool, rather than a trending or capacity planning tool.  However, you can use the "--parseable" option to postchecker_cli.php to generate parseable output you can then feed into another tool for trending purposes, if that's your bag.
 
+Author - Matt Willman - willman.matt@threepaw.com
+
 *** Design ***
 
 PostChecker is split into two primary pieces.  The "client" side code sits on the Postfix servers you want to monitor.  When someone connects to the "client" port, the client side code returns the number of active items in the configured queue directories.
