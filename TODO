@@ -1,0 +1,2 @@
+- Rewrite postchecker_server.php in C - the PHP version keeps dying on me
+- Handle network failure more gracefully

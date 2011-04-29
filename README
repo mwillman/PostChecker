@@ -1,116 +1,35 @@
-README
+*** Overview ***
 
-Copyright (c) 2005 Matt Willman
-ALL RIGHTS RESERVED
+PostChecker is a distributed monitoring tool for Postfix servers.  The main purpose of the tool is to connect to multiple Postfix servers, check their queue status, and generate a aggregate report based on those numbers.  While PostChecker can be used to monitor a single server, it really starts to make sense when three or more servers need to be monitored.
 
-Contact: willman.matt@threepaw.com
+PostChecker is designed to be a interactive monitoring tool, rather than a trending or capacity planning tool.  However, you can use the "--parseable" option to postchecker_cli.php to generate parseable output you can then feed into another tool for trending purposes, if that's your bag.
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+*** Design ***
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+PostChecker is split into two primary pieces.  The "client" side code sits on the Postfix servers you want to monitor.  When someone connects to the "client" port, the client side code returns the number of active items in the configured queue directories.
 
-You should have received a copy of the GNU General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place, Suite 330, Boston, MA 02111-1307 USA
+The "server" side consists of three different front ends.
 
-Initial release
-07/2005    MBWillman
+Use:
 
-FORMATTED FOR 80x25
-
-
-Overview
-
-	PostChecker is a distributed monitoring tool for Postfix servers.  The
-main purpose of the tool is to connect to multiple Postfix servers, check their
-queue status, and generate a aggregate report based on those numbers.  While
-PostChecker can be used to monitor a single server, it really starts to make
-sense when three or more servers need to be monitored.
-
-	PostChecker is designed to be a interactive monitoring tool, rather
-than a trending or capacity planning tool.  However, you can use the
-"--parseable" option to postchecker_cli.php to generate parseable output you
-can then feed into another tool for trending purposes, if that's your bag.
-
-
-Contacts
-
-	You can reach me at the following email address.
-
-	Matt Willman - willman.matt@threepaw.com
-
-	Comments, criticism, questions, patches are all welcome.
-
-
-How to get it
-
-	The primary project website currently resides here:
-
-	http://ossclass.wiki.cs.pdx.edu/cgi-bin/twiki/view/Main/MattWillman
-
-	This website contains links to the devel and stable tarballs, the
-SubVersion repository, and some other relevant links.
-
-
-Design
-
-	PostChecker is split into two primary pieces.  The "client" side code
-sits on the Postfix servers you want to monitor.  When someone connects to
-the "client" port, the client side code returns the number of active items in
-the configured queue directories.
-
-	The "server" side consists of three different front ends.
-
-	Use:
-
-	postchecker_web.php
+postchecker_web.php
 	-- if you need to check the queues, and get a real-time response
-	postchecker_cli.php
+postchecker_cli.php
 	-- if you're not really a fan of that whole web thing
 	-- or if you want to get parseable output for another tool
-	postchecker_server.php
+postchecker_server.php
 	-- to get a continually updating view of your queues
 
-	While the server side code can run on the same machine as the client
-side code, the machine running the server side code accepts the additional
-burden of processing the statistics returned by the client side code.
+While the server side code can run on the same machine as the client side code, the machine running the server side code accepts the additional burden of processing the statistics returned by the client side code.
 
+*** Install ***
 
-Install
+See the included INSTALL document in the primary source tree.
 
-	See the included INSTALL document in the primary source tree.
+*** Use ***
 
+The INSTALL document details what to put where.  Once everything is installed, the front-ends should produce output in the following manner.
 
-Use
-
-	The INSTALL document details what to put where.  Once everything is
-installed, the front-ends should produce output in the following manner.
-
-	A.  postchecker_web.php should return a dynamic HTML page with the
-		current status of the queues when you invoke it
-	B.  postchecker_cli.php should return a text output representation
-		of the current status of the queues
-	C.  postchecker_server.php (when running as a daemon) should update
-		the postchecker.html page (actually the graphs contained in
-		the page) every $update seconds (60 by default)
-
-
-Modification
-
-	It's GPL'd code.  I don't believe there's anything fantastically
-complex about the code.  As a matter of fact, there's probably plenty of things
-wrong with it.  If you have ideas about how to make the code more efficient,
-drop me a note.  If you've re-implemented in another language (maybe you don't
-want to install PHP?), let me know about that as well.  Choice is good.
-
-
-Future development direction...maybe
-
-- a Windows GUI interface using PHP/GTK
-- install script
-- delete transient graphs, or generate them inline
+A.  postchecker_web.php should return a dynamic HTML page with the current status of the queues when you invoke it
+B.  postchecker_cli.php should return a text output representation of the current status of the queues
+C.  postchecker_server.php (when running as a daemon) should update the postchecker.html page (actually the graphs contained in the page) every $update seconds (60 by default)
