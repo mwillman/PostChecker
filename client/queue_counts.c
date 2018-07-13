@@ -18,6 +18,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <syslog.h>
@@ -189,7 +190,7 @@ int main()
 /*
  * int dircount(char *)
  *
- * accept a directory name, and return the number of files within it
+ * accept a directory name, and return the number of files (and only the files) within it
  */
 
 int dircount(char *current_dir)
@@ -197,7 +198,11 @@ int dircount(char *current_dir)
 	int count = 0;
 
 	struct dirent *dp;
+	struct stat buf;
 	DIR *dfd;
+
+	char *current_file;
+	current_file = malloc(255);
 
 	// open the directory
 	if ((dfd = opendir(current_dir)) == NULL)
@@ -209,12 +214,34 @@ int dircount(char *current_dir)
 	// iterate through the directory and count up the files
 	while ((dp = readdir(dfd)) != NULL)
 	{
+		current_file = strcpy(current_file, current_dir);
+		current_file = strcat(current_file, "/");
+		current_file = strcat(current_file, dp->d_name);
+
+		// if we can't lstat the entry, something is seriously wrong
+		if (lstat(current_file, &buf) < 0)
+		{
+			// cannot stat current entry
+			syslog(LOG_ERR, "unable to stat entry %s in spool directory", current_file);
+			continue;
+		}
+		else
+		{
+			// skip if it's not a regular file
+			if (!(S_ISREG(buf.st_mode)))
+			{
+				continue;
+			}
+		}
+
+		// skip . and .. entries
 		if (strcmp(dp->d_name, ".") == 0
 			|| strcmp(dp->d_name, "..") == 0)
 		{
 			continue;
 		}
 
+		// if it passes all the checks, increment the count
 		count++;
 	}
 
