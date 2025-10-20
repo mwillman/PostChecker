@@ -1,0 +1,45 @@
+These instructions assume Linux.  Should be easily implemented on anything similar
+running Python and systemd.
+
+*** client install ***
+
+Daemon need to run as root, or a user that can access the Postfix spool queues.
+
+Copy queue_counts.py to /usr/local/bin (or elsewhere, and modify the service file)
+
+$ chmod 0755 /usr/local/bin/queue_counts.py
+
+Add the following line to /etc/services
+
+postchecker     7678/tcp                        # PostChecker port
+
+Copy queue_counts.service to /etc/systemd/system and run:
+
+$ systemctl daemon-reload
+$ systemctl enable queue_counts
+$ systemctl start queue_counts
+
+Assuming everything is OK,
+
+$ systemctl status queue_counts
+
+Should return good news.
+
+Finally, the critical system test.  From an allowed IP address:
+
+# nc <client name> 7678
+
+If you see something like this, you're good to go:
+
+[root@localhost main]# nc <client name> postchecker
+Trying 127.0.0.1...
+Connected to localhost (127.0.0.1).
+Escape character is '^]'.
+active:5
+deferred:5
+corrupt:0
+hold:0
+Connection closed by foreign host.
+[root@localhost main]#
+
+If you don't see something similar to that, check your log files for errors.
