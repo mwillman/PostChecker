@@ -2,7 +2,7 @@
  * queue_counts.c
  *
  * Alternative client side daemon for PostChecker.  Returns the number of items in the configured spool directories
- * 
+ *
  * Author - Matt Willman - willman.matt@threepaw.com
  */
 

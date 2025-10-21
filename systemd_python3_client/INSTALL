@@ -1,5 +1,5 @@
 These instructions assume Linux.  Should be easily implemented on anything similar
-running Python and systemd.
+running Python and systemd.  Logs to LOCAL1, just like the old C client.
 
 *** client install ***
 
