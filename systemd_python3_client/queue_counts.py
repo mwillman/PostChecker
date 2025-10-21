@@ -6,6 +6,7 @@
     Author - Matt Willman - willman.matt@threepaw.com
 """
 
+import asyncio
 import os
 import socket
 import sys
@@ -23,12 +24,12 @@ queue_dirs = ["active", "deferred", "corrupt", "hold"]
 def find_spool_dir():
     """Determine the base location of the spool directory"""
     postconf_location = subprocess.run(["which postconf"],\
-        capture_output=True, check=False, shell=True, text=True)
+        capture_output=True, check=True, shell=True, text=True)
 
     if postconf_location.stdout:
         postconf_cmd = [postconf_location.stdout.rstrip(), '-h', 'queue_directory']
         syslog.syslog(f"INFO: found postconf, running {postconf_cmd}")
-        spool_dir = subprocess.run(postconf_cmd, capture_output=True, check=False, text=True)
+        spool_dir = subprocess.run(postconf_cmd, capture_output=True, check=True, text=True)
     else:
         syslog.syslog("ERROR: unable to determine postconf location")
         sys.exit(-1)
@@ -48,7 +49,7 @@ def count_files(directory: str) -> int:
         syslog.syslog(f"ERROR: counting queue files returned {e}")
         return -1
 
-def handle_client(client_socket, client_ip, spool_dir):
+async def handle_client(client_socket, client_ip, spool_dir):
     """Return queue counts to client"""
     if client_ip not in restricted_ips and "0.0.0.0" not in restricted_ips:
         syslog.syslog(f"WARNING: rejected connection from {client_ip}")
@@ -71,7 +72,7 @@ def handle_client(client_socket, client_ip, spool_dir):
 
 def main():
     """Main loop, wait for client connections"""
-    syslog.openlog(logoption=syslog.LOG_PID, facility=syslog.LOG_INFO)
+    syslog.openlog(logoption=syslog.LOG_PID, facility=syslog.LOG_LOCAL1)
     syslog.syslog("INFO: starting queue_counts.py")
     spool_dir = find_spool_dir()
     syslog.syslog("INFO: daemon started, listening for connections...")
@@ -85,7 +86,7 @@ def main():
             try:
                 client_socket, addr = server_socket.accept()
                 client_ip = addr[0]
-                handle_client(client_socket, client_ip, spool_dir)
+                asyncio.run(handle_client(client_socket, client_ip, spool_dir))
             except OSError as e:
                 syslog.syslog(f"ERROR: exception in handling client: {e}")
 
