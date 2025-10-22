@@ -1,9 +1,7 @@
 These instructions assume Linux.  Should be easily implemented on anything similar
 running Python and systemd.  Logs to LOCAL1, just like the old C client.
 
-*** client install ***
-
-Daemon need to run as root, or a user that can access the Postfix spool queues.
+Daemon needs to run as root, or a user that can access the Postfix spool queues.
 
 Copy queue_counts.py to /usr/local/bin (or elsewhere, and modify the service file)
 
