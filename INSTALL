@@ -20,7 +20,7 @@ Client
 
 *** client install ***
 
-See the INSTALL document in the $POSTCHECKER_ROOT/client directory
+See the INSTALL documents in the $POSTCHECKER_ROOT/$CLIENTS directories
 
 *** server install ***
 

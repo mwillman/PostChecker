@@ -1,1 +1,2 @@
-client/queue_counts
+client_initd_c/queue_counts
+client_systemd_go/queue_counts

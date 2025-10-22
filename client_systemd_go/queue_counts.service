@@ -1,0 +1,17 @@
+[Unit]
+Description=Queue Counts Daemon for PostChecker
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/queue_counts
+Restart=on-failure
+RestartSec=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=queue_counts
+User=nobody
+Group=nogroup
+
+[Install]
+WantedBy=multi-user.target
